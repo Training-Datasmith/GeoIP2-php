@@ -11,4 +11,6 @@ namespace GeoIp2\Model;
  * details.
  */
 // phpcs:disable
-class Enterprise extends City {}
+class Enterprise extends City
+{
+}

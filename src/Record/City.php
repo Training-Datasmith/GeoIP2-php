@@ -11,4 +11,6 @@ namespace GeoIp2\Record;
  * Country.
  */
 // phpcs:disable
-class City extends AbstractPlaceRecord {}
+class City extends AbstractPlaceRecord
+{
+}
