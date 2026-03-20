@@ -1,24 +1,22 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Geo_Ip2\Web_Service;
 
-namespace GeoIp2\WebService;
-
-use GeoIp2\Exception\AddressNotFoundException;
-use GeoIp2\Exception\AuthenticationException;
-use GeoIp2\Exception\GeoIp2Exception;
-use GeoIp2\Exception\HttpException;
-use GeoIp2\Exception\InvalidRequestException;
-use GeoIp2\Exception\OutOfQueriesException;
-use GeoIp2\Model\City;
-use GeoIp2\Model\Country;
-use GeoIp2\Model\Insights;
-use GeoIp2\ProviderInterface;
-use MaxMind\Exception\InsufficientFundsException;
-use MaxMind\Exception\IpAddressNotFoundException;
-use MaxMind\Exception\WebServiceException;
-use MaxMind\WebService\Client as WsClient;
-
+use Geo_Ip2\Exception\Address_Not_Found_Exception;
+use Geo_Ip2\Exception\Authentication_Exception;
+use Geo_Ip2\Exception\Geo_Ip2exception;
+use Geo_Ip2\Exception\Http_Exception;
+use Geo_Ip2\Exception\Invalid_Request_Exception;
+use Geo_Ip2\Exception\Out_Of_Queries_Exception;
+use Geo_Ip2\Model\City;
+use Geo_Ip2\Model\Country;
+use Geo_Ip2\Model\Insights;
+use Geo_Ip2\Provider_Interface;
+use Max_Mind\Exception\Insufficient_Funds_Exception;
+use Max_Mind\Exception\Ip_Address_Not_Found_Exception;
+use Max_Mind\Exception\Web_Service_Exception;
+use Max_Mind\Web_Service\Client as WsClient;
 /**
  * This class provides a client API for all the GeoIP2 web services.
  * The services are Country, City Plus, and Insights. Each service returns
@@ -49,13 +47,11 @@ use MaxMind\WebService\Client as WsClient;
  *
  * If the request fails, the client class throws an exception.
  */
-class Client implements ProviderInterface
+class Client implements Provider_Interface
 {
-    private readonly WsClient $client;
-    private static string $basePath = '/geoip/v2.1';
-
+    private readonly Ws_Client $client;
+    private static string $base_path = '/geoip/v2.1';
     public const VERSION = 'v3.3.0';
-
     /**
      * Constructor.
      *
@@ -80,31 +76,28 @@ class Client implements ProviderInterface
      *                                         `http://username:password@127.0.0.1:10`.
      */
     public function __construct(
-        int $accountId,
-        string $licenseKey,
+        int $account_id,
+        string $license_key,
         /** @var list<string> */
-        public readonly array $locales = ['en'], // Promoted and readonly
+        public readonly array $locales = ['en'],
+        // Promoted and readonly
         array $options = []
-    ) {
+    )
+    {
         // This is for backwards compatibility. Do not remove except for a
         // major version bump.
         // @phpstan-ignore-next-line
         if (\is_string($options)) {
             $options = ['host' => $options];
         }
-
         $options['host'] ??= 'geoip.maxmind.com';
-
-        $options['userAgent'] = $this->userAgent();
-
-        $this->client = new WsClient($accountId, $licenseKey, $options);
+        $options['userAgent'] = $this->user_agent();
+        $this->client = new Ws_Client($account_id, $license_key, $options);
     }
-
-    private function userAgent(): string
+    private function user_agent(): string
     {
         return 'GeoIP2-API/' . self::VERSION;
     }
-
     /**
      * This method calls the City Plus service.
      *
@@ -130,11 +123,10 @@ class Client implements ProviderInterface
      * @throws \InvalidArgumentException if something other than a single IP address or "me" is
      *                                   passed to the method
      */
-    public function city(string $ipAddress = 'me'): City
+    public function city(string $ip_address = 'me'): City
     {
-        return $this->responseFor('city', City::class, $ipAddress);
+        return $this->response_for('city', City::class, $ip_address);
     }
-
     /**
      * This method calls the Country service.
      *
@@ -160,11 +152,10 @@ class Client implements ProviderInterface
      * @throws \InvalidArgumentException if something other than a single IP address or "me" is
      *                                   passed to the method
      */
-    public function country(string $ipAddress = 'me'): Country
+    public function country(string $ip_address = 'me'): Country
     {
-        return $this->responseFor('country', Country::class, $ipAddress);
+        return $this->response_for('country', Country::class, $ip_address);
     }
-
     /**
      * This method calls the Insights service. Insights is only supported by
      * the GeoIP2 web service. The GeoLite2 web service does not support it.
@@ -191,11 +182,10 @@ class Client implements ProviderInterface
      * @throws \InvalidArgumentException if something other than a single IP address or "me" is
      *                                   passed to the method
      */
-    public function insights(string $ipAddress = 'me'): Insights
+    public function insights(string $ip_address = 'me'): Insights
     {
-        return $this->responseFor('insights', Insights::class, $ipAddress);
+        return $this->response_for('insights', Insights::class, $ip_address);
     }
-
     /**
      * Generic helper method to call an endpoint and return the corresponding model.
      *
@@ -215,59 +205,28 @@ class Client implements ProviderInterface
      *
      * @return TModel the corresponding model object, matching the passed class string
      */
-    private function responseFor(string $endpoint, string $class, string $ipAddress): City|Country|Insights
+    private function response_for(string $endpoint, string $class, string $ip_address): City|Country|Insights
     {
-        if ($ipAddress !== 'me' && !filter_var($ipAddress, \FILTER_VALIDATE_IP)) {
-            throw new \InvalidArgumentException(
-                "The value \"$ipAddress\" is not a valid IP address."
-            );
+        if ($ip_address !== 'me' && !filter_var($ip_address, \FILTER_VALIDATE_IP)) {
+            throw new \InvalidArgumentException("The value \"{$ip_address}\" is not a valid IP address.");
         }
-        $path = implode('/', [self::$basePath, $endpoint, $ipAddress]);
-
+        $path = implode('/', [self::$base_path, $endpoint, $ip_address]);
         try {
-            $service = (new \ReflectionClass($class))->getShortName();
+            $service = (new \ReflectionClass($class))->get_short_name();
             $body = $this->client->get('GeoIP2 ' . $service, $path);
-        } catch (IpAddressNotFoundException $ex) {
-            throw new AddressNotFoundException(
-                $ex->getMessage(),
-                $ex->getStatusCode(),
-                $ex
-            );
-        } catch (\MaxMind\Exception\AuthenticationException $ex) {
-            throw new AuthenticationException(
-                $ex->getMessage(),
-                $ex->getStatusCode(),
-                $ex
-            );
-        } catch (InsufficientFundsException $ex) {
-            throw new OutOfQueriesException(
-                $ex->getMessage(),
-                $ex->getStatusCode(),
-                $ex
-            );
-        } catch (\MaxMind\Exception\InvalidRequestException $ex) {
-            throw new InvalidRequestException(
-                $ex->getMessage(),
-                $ex->getErrorCode(),
-                $ex->getStatusCode(),
-                $ex->getUri(),
-                $ex
-            );
-        } catch (\MaxMind\Exception\HttpException $ex) {
-            throw new HttpException(
-                $ex->getMessage(),
-                $ex->getStatusCode(),
-                $ex->getUri(),
-                $ex
-            );
-        } catch (WebServiceException $ex) {
-            throw new GeoIp2Exception(
-                $ex->getMessage(),
-                $ex->getCode(),
-                $ex
-            );
+        } catch (Ip_Address_Not_Found_Exception $ex) {
+            throw new Address_Not_Found_Exception($ex->get_message(), $ex->get_status_code(), $ex);
+        } catch (\Max_Mind\Exception\Authentication_Exception $ex) {
+            throw new Authentication_Exception($ex->get_message(), $ex->get_status_code(), $ex);
+        } catch (Insufficient_Funds_Exception $ex) {
+            throw new Out_Of_Queries_Exception($ex->get_message(), $ex->get_status_code(), $ex);
+        } catch (\Max_Mind\Exception\Invalid_Request_Exception $ex) {
+            throw new Invalid_Request_Exception($ex->get_message(), $ex->get_error_code(), $ex->get_status_code(), $ex->get_uri(), $ex);
+        } catch (\Max_Mind\Exception\Http_Exception $ex) {
+            throw new Http_Exception($ex->get_message(), $ex->get_status_code(), $ex->get_uri(), $ex);
+        } catch (Web_Service_Exception $ex) {
+            throw new Geo_Ip2exception($ex->get_message(), $ex->get_code(), $ex);
         }
-
         return new $class($body, $this->locales);
     }
 }

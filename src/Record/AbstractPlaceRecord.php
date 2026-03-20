@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Geo_Ip2\Record;
 
-namespace GeoIp2\Record;
-
-abstract class AbstractPlaceRecord extends AbstractNamedRecord
+abstract class Abstract_Place_Record extends Abstract_Named_Record
 {
     /**
      * @var int|null A value from 0-100 indicating MaxMind's
@@ -12,13 +11,11 @@ abstract class AbstractPlaceRecord extends AbstractNamedRecord
      *               from the Insights service and the GeoIP2 Enterprise database.
      */
     public readonly ?int $confidence;
-
     /**
      * @var int|null The GeoName ID for the location level. This attribute
      *               is returned by all location services and databases.
      */
-    public readonly ?int $geonameId;
-
+    public readonly ?int $geoname_id;
     /**
      * @ignore
      *
@@ -28,11 +25,9 @@ abstract class AbstractPlaceRecord extends AbstractNamedRecord
     public function __construct(array $record, array $locales = ['en'])
     {
         parent::__construct($record, $locales);
-
         $this->confidence = $record['confidence'] ?? null;
-        $this->geonameId = $record['geoname_id'] ?? null;
+        $this->geoname_id = $record['geoname_id'] ?? null;
     }
-
     /**
      * @return array<string, mixed>
      */
@@ -42,11 +37,9 @@ abstract class AbstractPlaceRecord extends AbstractNamedRecord
         if ($this->confidence !== null) {
             $js['confidence'] = $this->confidence;
         }
-
-        if ($this->geonameId !== null) {
-            $js['geoname_id'] = $this->geonameId;
+        if ($this->geoname_id !== null) {
+            $js['geoname_id'] = $this->geoname_id;
         }
-
         return $js;
     }
 }

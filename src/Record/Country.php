@@ -1,30 +1,27 @@
 <?php
 
-declare(strict_types=1);
-
-namespace GeoIp2\Record;
+declare (strict_types=1);
+namespace Geo_Ip2\Record;
 
 /**
  * Contains data for the country record associated with an IP address.
  *
  * This record is returned by all location services and databases.
  */
-class Country extends AbstractPlaceRecord
+class Country extends Abstract_Place_Record
 {
     /**
      * @var bool This is true if the country is a
      *           member state of the European Union. This attribute is returned by all
      *           location services and databases.
      */
-    public readonly bool $isInEuropeanUnion;
-
+    public readonly bool $is_in_european_union;
     /**
      * @var string|null The two-character ISO 3166-1 alpha code
      *                  for the country. See https://en.wikipedia.org/wiki/ISO_3166-1. This
      *                  attribute is returned by all location services and databases.
      */
-    public readonly ?string $isoCode;
-
+    public readonly ?string $iso_code;
     /**
      * @ignore
      *
@@ -34,24 +31,21 @@ class Country extends AbstractPlaceRecord
     public function __construct(array $record, array $locales = ['en'])
     {
         parent::__construct($record, $locales);
-
-        $this->isInEuropeanUnion = $record['is_in_european_union'] ?? false;
-        $this->isoCode = $record['iso_code'] ?? null;
+        $this->is_in_european_union = $record['is_in_european_union'] ?? false;
+        $this->iso_code = $record['iso_code'] ?? null;
     }
-
     /**
      * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
         $js = parent::jsonSerialize();
-        if ($this->isInEuropeanUnion !== false) {
-            $js['is_in_european_union'] = $this->isInEuropeanUnion;
+        if ($this->is_in_european_union !== false) {
+            $js['is_in_european_union'] = $this->is_in_european_union;
         }
-        if ($this->isoCode !== null) {
-            $js['iso_code'] = $this->isoCode;
+        if ($this->iso_code !== null) {
+            $js['iso_code'] = $this->iso_code;
         }
-
         return $js;
     }
 }

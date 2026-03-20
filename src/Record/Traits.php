@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Geo_Ip2\Record;
 
-namespace GeoIp2\Record;
-
-use GeoIp2\Util;
-
+use Geo_Ip2\Util;
 /**
  * Contains data for the traits record associated with an IP address.
  *
@@ -20,8 +18,7 @@ class Traits implements \JsonSerializable
      *               is only available from the City Plus and Insights web services and the
      *               GeoIP2 Enterprise database.
      */
-    public readonly ?int $autonomousSystemNumber;
-
+    public readonly ?int $autonomous_system_number;
     /**
      * @var string|null The organization
      *                  associated with the registered autonomous system number for the IP address.
@@ -29,8 +26,7 @@ class Traits implements \JsonSerializable
      *                  attribute is only available from the City Plus and Insights web services and
      *                  the GeoIP2 Enterprise database.
      */
-    public readonly ?string $autonomousSystemOrganization;
-
+    public readonly ?string $autonomous_system_organization;
     /**
      * @var string|null The connection type may take the
      *                  following  values: "Dialup", "Cable/DSL", "Corporate", "Cellular", and
@@ -38,8 +34,7 @@ class Traits implements \JsonSerializable
      *                  only available from the City Plus and Insights web services and the GeoIP2
      *                  Enterprise database.
      */
-    public readonly ?string $connectionType;
-
+    public readonly ?string $connection_type;
     /**
      * @var string|null The second level domain associated with the
      *                  IP address. This will be something like "example.com" or "example.co.uk",
@@ -48,7 +43,6 @@ class Traits implements \JsonSerializable
      *                  database.
      */
     public readonly ?string $domain;
-
     /**
      * @var string|null The IP address that the data in the model
      *                  is for. If you performed a "me" lookup against the web service, this
@@ -57,8 +51,7 @@ class Traits implements \JsonSerializable
      *                  address locally assigned to it. This attribute is returned by all end
      *                  points.
      */
-    public readonly ?string $ipAddress;
-
+    public readonly ?string $ip_address;
     /**
      * @var bool This is true if the IP address belongs to
      *           any sort of anonymous network. This property is only available from GeoIP2
@@ -66,8 +59,7 @@ class Traits implements \JsonSerializable
      *
      * @deprecated use $anonymizer->isAnonymous in the Insights response instead
      */
-    public readonly bool $isAnonymous;
-
+    public readonly bool $is_anonymous;
     /**
      * @var bool This is true if the IP address is
      *           registered to an anonymous VPN provider. If a VPN provider does not register
@@ -77,15 +69,13 @@ class Traits implements \JsonSerializable
      *
      * @deprecated use $anonymizer->isAnonymousVpn in the Insights response instead
      */
-    public readonly bool $isAnonymousVpn;
-
+    public readonly bool $is_anonymous_vpn;
     /**
      * @var bool This is true if the IP address belongs to an [anycast
      *           network](https://en.wikipedia.org/wiki/Anycast). This property is not
      *           available from GeoLite databases or web services.
      */
-    public readonly bool $isAnycast;
-
+    public readonly bool $is_anycast;
     /**
      * @var bool This is true if the IP address belongs
      *           to a hosting or VPN provider (see description of isAnonymousVpn property).
@@ -93,24 +83,21 @@ class Traits implements \JsonSerializable
      *
      * @deprecated use $anonymizer->isHostingProvider in the Insights response instead
      */
-    public readonly bool $isHostingProvider;
-
+    public readonly bool $is_hosting_provider;
     /**
      * @var bool This attribute is true if MaxMind
      *           believes this IP address to be a legitimate proxy, such as an internal
      *           VPN used by a corporation. This attribute is only available in the GeoIP2
      *           Enterprise database.
      */
-    public readonly bool $isLegitimateProxy;
-
+    public readonly bool $is_legitimate_proxy;
     /**
      * @var bool This is true if the IP address belongs to
      *           a public proxy. This property is only available from GeoIP2 Insights.
      *
      * @deprecated use $anonymizer->isPublicProxy in the Insights response instead
      */
-    public readonly bool $isPublicProxy;
-
+    public readonly bool $is_public_proxy;
     /**
      * @var bool This is true if the IP address is
      *           on a suspected anonymizing network and belongs to a residential ISP. This
@@ -118,53 +105,46 @@ class Traits implements \JsonSerializable
      *
      * @deprecated use $anonymizer->isResidentialProxy in the Insights response instead
      */
-    public readonly bool $isResidentialProxy;
-
+    public readonly bool $is_residential_proxy;
     /**
      * @var bool This is true if the IP address is a Tor
      *           exit node. This property is only available from GeoIP2 Insights.
      *
      * @deprecated use $anonymizer->isTorExitNode in the Insights response instead
      */
-    public readonly bool $isTorExitNode;
-
+    public readonly bool $is_tor_exit_node;
     /**
      * @var string|null The name of the ISP associated with the IP
      *                  address. This attribute is only available from the City Plus and Insights
      *                  web services and the GeoIP2 Enterprise database.
      */
     public readonly ?string $isp;
-
     /**
      * @var string|null The [mobile country code
      *                  (MCC)](https://en.wikipedia.org/wiki/Mobile_country_code) associated with
      *                  the IP address and ISP. This property is available from the City Plus and
      *                  Insights web services and the GeoIP2 Enterprise database.
      */
-    public readonly ?string $mobileCountryCode;
-
+    public readonly ?string $mobile_country_code;
     /**
      * @var string|null The [mobile network code
      *                  (MNC)](https://en.wikipedia.org/wiki/Mobile_country_code) associated with
      *                  the IP address and ISP. This property is available from the City Plus and
      *                  Insights web services and the GeoIP2 Enterprise database.
      */
-    public readonly ?string $mobileNetworkCode;
-
+    public readonly ?string $mobile_network_code;
     /**
      * @var string|null The network in CIDR notation associated with
      *                  the record. In particular, this is the largest network where all of the
      *                  fields besides $ipAddress have the same value.
      */
     public readonly ?string $network;
-
     /**
      * @var string|null The name of the organization
      *                  associated with the IP address. This attribute is only available from the
      *                  City Plus and Insights web services and the GeoIP2 Enterprise database.
      */
     public readonly ?string $organization;
-
     /**
      * @var float|null A risk score from 0.01 to 99 indicating the risk associated with the
      *                 IP address. A higher score indicates a higher risk. Please note that the IP
@@ -179,23 +159,20 @@ class Traits implements \JsonSerializable
      *                 signals we have show that the network is low-risk. If you would like to get
      *                 signals for low-risk networks, please use the minFraud web services.
      */
-    public readonly ?float $ipRiskSnapshot;
-
+    public readonly ?float $ip_risk_snapshot;
     /**
      * @var float|null An indicator of how static or
      *                 dynamic an IP address is. This property is only available from GeoIP2
      *                 Insights.
      */
-    public readonly ?float $staticIpScore;
-
+    public readonly ?float $static_ip_score;
     /**
      * @var int|null The estimated number of users sharing
      *               the IP/network during the past 24 hours. For IPv4, the count is for the
      *               individual IP. For IPv6, the count is for the /64 network. This property is
      *               only available from GeoIP2 Insights.
      */
-    public readonly ?int $userCount;
-
+    public readonly ?int $user_count;
     /**
      * @var string|null <p>The user type associated with the IP
      *  address. This can be one of the following values:</p>
@@ -222,8 +199,7 @@ class Traits implements \JsonSerializable
      *   GeoIP2 Enterprise database.
      * </p>
      */
-    public readonly ?string $userType;
-
+    public readonly ?string $user_type;
     /**
      * @ignore
      *
@@ -231,88 +207,86 @@ class Traits implements \JsonSerializable
      */
     public function __construct(array $record)
     {
-        $this->autonomousSystemNumber = $record['autonomous_system_number'] ?? null;
-        $this->autonomousSystemOrganization = $record['autonomous_system_organization'] ?? null;
-        $this->connectionType = $record['connection_type'] ?? null;
+        $this->autonomous_system_number = $record['autonomous_system_number'] ?? null;
+        $this->autonomous_system_organization = $record['autonomous_system_organization'] ?? null;
+        $this->connection_type = $record['connection_type'] ?? null;
         $this->domain = $record['domain'] ?? null;
-        $this->ipAddress = $record['ip_address'] ?? null;
-        $this->isAnonymous = $record['is_anonymous'] ?? false;
-        $this->isAnonymousVpn = $record['is_anonymous_vpn'] ?? false;
-        $this->isAnycast = $record['is_anycast'] ?? false;
-        $this->isHostingProvider = $record['is_hosting_provider'] ?? false;
-        $this->isLegitimateProxy = $record['is_legitimate_proxy'] ?? false;
+        $this->ip_address = $record['ip_address'] ?? null;
+        $this->is_anonymous = $record['is_anonymous'] ?? false;
+        $this->is_anonymous_vpn = $record['is_anonymous_vpn'] ?? false;
+        $this->is_anycast = $record['is_anycast'] ?? false;
+        $this->is_hosting_provider = $record['is_hosting_provider'] ?? false;
+        $this->is_legitimate_proxy = $record['is_legitimate_proxy'] ?? false;
         $this->isp = $record['isp'] ?? null;
-        $this->isPublicProxy = $record['is_public_proxy'] ?? false;
-        $this->isResidentialProxy = $record['is_residential_proxy'] ?? false;
-        $this->isTorExitNode = $record['is_tor_exit_node'] ?? false;
-        $this->mobileCountryCode = $record['mobile_country_code'] ?? null;
-        $this->mobileNetworkCode = $record['mobile_network_code'] ?? null;
+        $this->is_public_proxy = $record['is_public_proxy'] ?? false;
+        $this->is_residential_proxy = $record['is_residential_proxy'] ?? false;
+        $this->is_tor_exit_node = $record['is_tor_exit_node'] ?? false;
+        $this->mobile_country_code = $record['mobile_country_code'] ?? null;
+        $this->mobile_network_code = $record['mobile_network_code'] ?? null;
         $this->organization = $record['organization'] ?? null;
-        $this->ipRiskSnapshot = $record['ip_risk_snapshot'] ?? null;
-        $this->staticIpScore = $record['static_ip_score'] ?? null;
-        $this->userCount = $record['user_count'] ?? null;
-        $this->userType = $record['user_type'] ?? null;
-
+        $this->ip_risk_snapshot = $record['ip_risk_snapshot'] ?? null;
+        $this->static_ip_score = $record['static_ip_score'] ?? null;
+        $this->user_count = $record['user_count'] ?? null;
+        $this->user_type = $record['user_type'] ?? null;
         if (isset($record['network'])) {
             $this->network = $record['network'];
         } else {
-            $this->network = isset($record['prefix_len']) ? Util::cidr($this->ipAddress, $record['prefix_len']) : null;
+            $this->network = isset($record['prefix_len']) ? Util::cidr($this->ip_address, $record['prefix_len']) : null;
         }
     }
-
     /**
      * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
         $js = [];
-        if ($this->autonomousSystemNumber !== null) {
-            $js['autonomous_system_number'] = $this->autonomousSystemNumber;
+        if ($this->autonomous_system_number !== null) {
+            $js['autonomous_system_number'] = $this->autonomous_system_number;
         }
-        if ($this->autonomousSystemOrganization !== null) {
-            $js['autonomous_system_organization'] = $this->autonomousSystemOrganization;
+        if ($this->autonomous_system_organization !== null) {
+            $js['autonomous_system_organization'] = $this->autonomous_system_organization;
         }
-        if ($this->connectionType !== null) {
-            $js['connection_type'] = $this->connectionType;
+        if ($this->connection_type !== null) {
+            $js['connection_type'] = $this->connection_type;
         }
         if ($this->domain !== null) {
             $js['domain'] = $this->domain;
         }
-        if ($this->ipAddress !== null) {
-            $js['ip_address'] = $this->ipAddress;
+        if ($this->ip_address !== null) {
+            $js['ip_address'] = $this->ip_address;
         }
-        if ($this->isAnonymous !== false) {
-            $js['is_anonymous'] = $this->isAnonymous;
+        if ($this->is_anonymous !== false) {
+            $js['is_anonymous'] = $this->is_anonymous;
         }
-        if ($this->isAnonymousVpn !== false) {
-            $js['is_anonymous_vpn'] = $this->isAnonymousVpn;
+        if ($this->is_anonymous_vpn !== false) {
+            $js['is_anonymous_vpn'] = $this->is_anonymous_vpn;
         }
-        if ($this->isAnycast !== false) {
-            $js['is_anycast'] = $this->isAnycast;
+        if ($this->is_anycast !== false) {
+            $js['is_anycast'] = $this->is_anycast;
         }
-        if ($this->isHostingProvider !== false) {
-            $js['is_hosting_provider'] = $this->isHostingProvider;
+        if ($this->is_hosting_provider !== false) {
+            $js['is_hosting_provider'] = $this->is_hosting_provider;
         }
-        if ($this->isLegitimateProxy !== false) {
-            $js['is_legitimate_proxy'] = $this->isLegitimateProxy;
+        if ($this->is_legitimate_proxy !== false) {
+            $js['is_legitimate_proxy'] = $this->is_legitimate_proxy;
         }
-        if ($this->isPublicProxy !== false) {
-            $js['is_public_proxy'] = $this->isPublicProxy;
+        if ($this->is_public_proxy !== false) {
+            $js['is_public_proxy'] = $this->is_public_proxy;
         }
-        if ($this->isResidentialProxy !== false) {
-            $js['is_residential_proxy'] = $this->isResidentialProxy;
+        if ($this->is_residential_proxy !== false) {
+            $js['is_residential_proxy'] = $this->is_residential_proxy;
         }
-        if ($this->isTorExitNode !== false) {
-            $js['is_tor_exit_node'] = $this->isTorExitNode;
+        if ($this->is_tor_exit_node !== false) {
+            $js['is_tor_exit_node'] = $this->is_tor_exit_node;
         }
         if ($this->isp !== null) {
             $js['isp'] = $this->isp;
         }
-        if ($this->mobileCountryCode !== null) {
-            $js['mobile_country_code'] = $this->mobileCountryCode;
+        if ($this->mobile_country_code !== null) {
+            $js['mobile_country_code'] = $this->mobile_country_code;
         }
-        if ($this->mobileNetworkCode !== null) {
-            $js['mobile_network_code'] = $this->mobileNetworkCode;
+        if ($this->mobile_network_code !== null) {
+            $js['mobile_network_code'] = $this->mobile_network_code;
         }
         if ($this->network !== null) {
             $js['network'] = $this->network;
@@ -320,19 +294,18 @@ class Traits implements \JsonSerializable
         if ($this->organization !== null) {
             $js['organization'] = $this->organization;
         }
-        if ($this->ipRiskSnapshot !== null) {
-            $js['ip_risk_snapshot'] = $this->ipRiskSnapshot;
+        if ($this->ip_risk_snapshot !== null) {
+            $js['ip_risk_snapshot'] = $this->ip_risk_snapshot;
         }
-        if ($this->staticIpScore !== null) {
-            $js['static_ip_score'] = $this->staticIpScore;
+        if ($this->static_ip_score !== null) {
+            $js['static_ip_score'] = $this->static_ip_score;
         }
-        if ($this->userCount !== null) {
-            $js['user_count'] = $this->userCount;
+        if ($this->user_count !== null) {
+            $js['user_count'] = $this->user_count;
         }
-        if ($this->userType !== null) {
-            $js['user_type'] = $this->userType;
+        if ($this->user_type !== null) {
+            $js['user_type'] = $this->user_type;
         }
-
         return $js;
     }
 }

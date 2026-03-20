@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace GeoIp2\Record;
+declare (strict_types=1);
+namespace Geo_Ip2\Record;
 
 /**
  * Contains data for the postal record associated with an IP address.
@@ -19,7 +18,6 @@ class Postal implements \JsonSerializable
      *                  databases and services besides Country.
      */
     public readonly ?string $code;
-
     /**
      * @var int|null A value from 0-100 indicating MaxMind's
      *               confidence that the postal code is correct. This attribute is only
@@ -27,7 +25,6 @@ class Postal implements \JsonSerializable
      *               database.
      */
     public readonly ?int $confidence;
-
     /**
      * @ignore
      *
@@ -38,7 +35,6 @@ class Postal implements \JsonSerializable
         $this->code = $record['code'] ?? null;
         $this->confidence = $record['confidence'] ?? null;
     }
-
     /**
      * @return array<string, mixed>
      */
@@ -51,7 +47,6 @@ class Postal implements \JsonSerializable
         if ($this->confidence !== null) {
             $js['confidence'] = $this->confidence;
         }
-
         return $js;
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace GeoIp2\Record;
+declare (strict_types=1);
+namespace Geo_Ip2\Record;
 
 /**
  * Contains data for the represented country associated with an IP address.
@@ -11,7 +10,7 @@ namespace GeoIp2\Record;
  * for the IP's represented country. The represented country is the country
  * represented by something like a military base.
  */
-class RepresentedCountry extends Country
+class Represented_Country extends Country
 {
     /**
      * @var string|null A string indicating the type of entity that is
@@ -19,7 +18,6 @@ class RepresentedCountry extends Country
      *                  but this could expand to include other types in the future.
      */
     public readonly ?string $type;
-
     /**
      * @ignore
      *
@@ -29,10 +27,8 @@ class RepresentedCountry extends Country
     public function __construct(array $record, array $locales = ['en'])
     {
         parent::__construct($record, $locales);
-
         $this->type = $record['type'] ?? null;
     }
-
     /**
      * @return array<string, mixed>
      */
@@ -42,7 +38,6 @@ class RepresentedCountry extends Country
         if ($this->type !== null) {
             $js['type'] = $this->type;
         }
-
         return $js;
     }
 }

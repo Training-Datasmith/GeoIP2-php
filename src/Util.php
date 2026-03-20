@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace GeoIp2;
+declare (strict_types=1);
+namespace Geo_Ip2;
 
 class Util
 {
@@ -14,24 +13,21 @@ class Util
      *
      * @ignore
      */
-    public static function cidr(string $ipAddress, int $prefixLen): string
+    public static function cidr(string $ip_address, int $prefix_len): string
     {
-        $ipBytes = inet_pton($ipAddress);
-        $networkBytes = str_repeat("\0", \strlen($ipBytes));
-
-        $curPrefix = $prefixLen;
-        for ($i = 0; $i < \strlen($ipBytes) && $curPrefix > 0; $i++) {
-            $b = $ipBytes[$i];
-            if ($curPrefix < 8) {
-                $shiftN = 8 - $curPrefix;
-                $b = \chr(0xFF & (\ord($b) >> $shiftN) << $shiftN);
+        $ip_bytes = inet_pton($ip_address);
+        $network_bytes = str_repeat("\x00", \strlen($ip_bytes));
+        $cur_prefix = $prefix_len;
+        for ($i = 0; $i < \strlen($ip_bytes) && $cur_prefix > 0; $i++) {
+            $b = $ip_bytes[$i];
+            if ($cur_prefix < 8) {
+                $shift_n = 8 - $cur_prefix;
+                $b = \chr(0xff & \ord($b) >> $shift_n << $shift_n);
             }
-            $networkBytes[$i] = $b;
-            $curPrefix -= 8;
+            $network_bytes[$i] = $b;
+            $cur_prefix -= 8;
         }
-
-        $network = inet_ntop($networkBytes);
-
-        return "$network/$prefixLen";
+        $network = inet_ntop($network_bytes);
+        return "{$network}/{$prefix_len}";
     }
 }

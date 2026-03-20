@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Geo_Ip2\Model;
 
-namespace GeoIp2\Model;
-
-use GeoIp2\Record\City as CityRecord;
-use GeoIp2\Record\Location;
-use GeoIp2\Record\Postal;
-use GeoIp2\Record\Subdivision;
-
+use Geo_Ip2\Record\City as CityRecord;
+use Geo_Ip2\Record\Location;
+use Geo_Ip2\Record\Postal;
+use Geo_Ip2\Record\Subdivision;
 /**
  * Model class for the data returned by City Plus web service and City
  * database.
@@ -21,27 +19,23 @@ class City extends Country
     /**
      * @var CityRecord city data for the requested IP address
      */
-    public readonly CityRecord $city;
-
+    public readonly City_Record $city;
     /**
      * @var Location location data for the requested IP address
      */
     public readonly Location $location;
-
     /**
      * @var Subdivision An object representing the most specific subdivision
      *                  returned. If the response did not contain any
      *                  subdivisions, this method returns an empty
      *                  \GeoIp2\Record\Subdivision object.
      */
-    public readonly Subdivision $mostSpecificSubdivision;
-
+    public readonly Subdivision $most_specific_subdivision;
     /**
      * @var Postal postal data for the
      *             requested IP address
      */
     public readonly Postal $postal;
-
     /**
      * @var array<Subdivision> An array of \GeoIp2\Record\Subdivision
      *                         objects representing the country
@@ -57,7 +51,6 @@ class City extends Country
      *                         method returns an empty array.
      */
     public readonly array $subdivisions;
-
     /**
      * @ignore
      *
@@ -67,55 +60,40 @@ class City extends Country
     public function __construct(array $raw, array $locales = ['en'])
     {
         parent::__construct($raw, $locales);
-
-        $this->city = new CityRecord($raw['city'] ?? [], $locales);
+        $this->city = new City_Record($raw['city'] ?? [], $locales);
         $this->location = new Location($raw['location'] ?? []);
         $this->postal = new Postal($raw['postal'] ?? []);
-
         if (empty($raw['subdivisions'])) {
             $this->subdivisions = [];
-            $this->mostSpecificSubdivision
-                    = new Subdivision([], $locales);
-
+            $this->most_specific_subdivision = new Subdivision([], $locales);
             return;
         }
-
         $subdivisions = [];
         foreach ($raw['subdivisions'] as $sub) {
-            $subdivisions[]
-                = new Subdivision($sub, $locales)
-            ;
+            $subdivisions[] = new Subdivision($sub, $locales);
         }
-
         // Not using end as we don't want to modify internal pointer.
-        $this->mostSpecificSubdivision
-            = $subdivisions[\count($subdivisions) - 1];
+        $this->most_specific_subdivision = $subdivisions[\count($subdivisions) - 1];
         $this->subdivisions = $subdivisions;
     }
-
     /**
      * @return array<string, mixed>|null
      */
     public function jsonSerialize(): ?array
     {
         $js = parent::jsonSerialize();
-
         $city = $this->city->jsonSerialize();
         if (!empty($city)) {
             $js['city'] = $city;
         }
-
         $location = $this->location->jsonSerialize();
         if (!empty($location)) {
             $js['location'] = $location;
         }
-
-        $postal
-         = $this->postal->jsonSerialize();
+        $postal = $this->postal->jsonSerialize();
         if (!empty($postal)) {
             $js['postal'] = $postal;
         }
-
         $subdivisions = [];
         foreach ($this->subdivisions as $sub) {
             $subdivisions[] = $sub->jsonSerialize();
@@ -123,7 +101,6 @@ class City extends Country
         if (!empty($subdivisions)) {
             $js['subdivisions'] = $subdivisions;
         }
-
         return $js;
     }
 }

@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Geo_Ip2\Record;
 
-namespace GeoIp2\Record;
-
-abstract class AbstractNamedRecord implements \JsonSerializable
+abstract class Abstract_Named_Record implements \JsonSerializable
 {
     /**
      * @var string|null The name based on the locales list
@@ -12,14 +11,12 @@ abstract class AbstractNamedRecord implements \JsonSerializable
      *                  services and databases.
      */
     public readonly ?string $name;
-
     /**
      * @var array<string, string> An array map where the keys are locale codes
      *                            and the values are names. This attribute is returned by all location
      *                            services and databases.
      */
     public readonly array $names;
-
     /**
      * @ignore
      *
@@ -29,17 +26,14 @@ abstract class AbstractNamedRecord implements \JsonSerializable
     public function __construct(array $record, array $locales = ['en'])
     {
         $this->names = $record['names'] ?? [];
-
         foreach ($locales as $locale) {
             if (isset($this->names[$locale])) {
                 $this->name = $this->names[$locale];
-
                 return;
             }
         }
         $this->name = null;
     }
-
     /**
      * @return array<string, mixed>
      */
@@ -49,7 +43,6 @@ abstract class AbstractNamedRecord implements \JsonSerializable
         if (!empty($this->names)) {
             $js['names'] = $this->names;
         }
-
         return $js;
     }
 }

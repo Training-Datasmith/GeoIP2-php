@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Geo_Ip2\Model;
 
-namespace GeoIp2\Model;
-
-use GeoIp2\Record\Anonymizer;
-
+use Geo_Ip2\Record\Anonymizer;
 /**
  * Model class for the data returned by GeoIP2 Insights web service.
  *
@@ -20,7 +18,6 @@ class Insights extends City
      *                 network, VPN provider details, and confidence scores.
      */
     public readonly Anonymizer $anonymizer;
-
     /**
      * @ignore
      *
@@ -30,22 +27,18 @@ class Insights extends City
     public function __construct(array $raw, array $locales = ['en'])
     {
         parent::__construct($raw, $locales);
-
         $this->anonymizer = new Anonymizer($raw['anonymizer'] ?? []);
     }
-
     /**
      * @return array<string, mixed>|null
      */
     public function jsonSerialize(): ?array
     {
         $js = parent::jsonSerialize();
-
         $anonymizer = $this->anonymizer->jsonSerialize();
         if (!empty($anonymizer)) {
             $js['anonymizer'] = $anonymizer;
         }
-
         return $js;
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace GeoIp2\Record;
+declare (strict_types=1);
+namespace Geo_Ip2\Record;
 
 /**
  * Contains data for the subdivisions associated with an IP address.
@@ -10,7 +9,7 @@ namespace GeoIp2\Record;
  * This record is returned by all location databases and services besides
  * Country.
  */
-class Subdivision extends AbstractPlaceRecord
+class Subdivision extends Abstract_Place_Record
 {
     /**
      * @var string|null This is a string up to three characters long
@@ -18,8 +17,7 @@ class Subdivision extends AbstractPlaceRecord
      *                  https://en.wikipedia.org/wiki/ISO_3166-2. This attribute is returned by all
      *                  location databases and services except Country.
      */
-    public readonly ?string $isoCode;
-
+    public readonly ?string $iso_code;
     /**
      * @ignore
      *
@@ -29,20 +27,17 @@ class Subdivision extends AbstractPlaceRecord
     public function __construct(array $record, array $locales = ['en'])
     {
         parent::__construct($record, $locales);
-
-        $this->isoCode = $record['iso_code'] ?? null;
+        $this->iso_code = $record['iso_code'] ?? null;
     }
-
     /**
      * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
         $js = parent::jsonSerialize();
-        if ($this->isoCode !== null) {
-            $js['iso_code'] = $this->isoCode;
+        if ($this->iso_code !== null) {
+            $js['iso_code'] = $this->iso_code;
         }
-
         return $js;
     }
 }
